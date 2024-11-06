@@ -41,8 +41,19 @@ local augroup = vim.api.nvim_create_augroup
 --   command = "tabdo wincmd =",
 -- })
 
-local function open_nvim_tree(data)
+autocmd({ "InsertLeave", "BufWritePost" }, {
+  desc = "Show diagnostics on write and when no insert is happening",
+  group = augroup("nvlint", { clear = true }),
+  callback = function()
+    local lint_status, lint = pcall(require, "lint")
 
+    if lint_status then
+      lint.try_lint()
+    end
+  end,
+})
+
+local function open_nvim_tree(data)
   -- buffer is a [No Name]
   local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
 
@@ -52,7 +63,7 @@ local function open_nvim_tree(data)
   -- buffer is a real file on the disk
   local real_file = vim.fn.filereadable(data.file) == 1
 
-  if no_name or (not directory  and not real_file) then
+  if no_name or (not directory and not real_file) then
     return
   end
 
@@ -66,7 +77,6 @@ local function open_nvim_tree(data)
   end
 
   require("nvim-tree.api").tree.open()
-
 end
 
 autocmd("VimEnter", {

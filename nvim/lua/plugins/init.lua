@@ -3,24 +3,22 @@ local overrides = require("configs.overrides")
 return {
   {
     "stevearc/conform.nvim",
-    -- event = 'BufWritePre', -- uncomment for format on save
-    opts = require "configs.conform",
+    event = 'BufWritePre',
+    opts = require "configs.conform"
   },
 
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      -- format & linting
-      {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = function()
-          require "configs.null-ls"
-        end,
-      },
-    },
     config = function()
       require "configs.lspconfig"
     end, -- Override to setup mason-lspconfig
+  },
+
+  {
+    "mfussenegger/nvim-lint",
+    config = function()
+      require "configs/nvim-lint"
+    end
   },
 
   -- override plugin configs
@@ -38,7 +36,7 @@ return {
     "nvim-tree/nvim-web-devicons",
     opts = {
       override = {
-        ml = {icon="", name="OCaml"},
+        ml = { icon = "", name = "OCaml" },
       },
     },
   },
