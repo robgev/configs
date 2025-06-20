@@ -64,6 +64,7 @@ local function open_nvim_tree(data)
   local real_file = vim.fn.filereadable(data.file) == 1
 
   if no_name or (not directory and not real_file) then
+    vim.cmd "Nvdash"
     return
   end
 
