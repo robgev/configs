@@ -8,6 +8,7 @@ local options = {
     typescriptreact = { "eslint_d", "prettierd" },
     typescript = { "eslint_d", "prettierd" },
     python = { "ruff", "black" },
+    ruby = { "rubocop" },
   },
 
   format_on_save = {
