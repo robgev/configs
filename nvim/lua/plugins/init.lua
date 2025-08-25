@@ -1,10 +1,10 @@
-local overrides = require("configs.overrides")
+local overrides = require "configs.overrides"
 
 return {
   {
     "stevearc/conform.nvim",
-    event = 'BufWritePre',
-    opts = require "configs.conform"
+    event = "BufWritePre",
+    opts = require "configs.conform",
   },
 
   {
@@ -18,13 +18,13 @@ return {
     "mfussenegger/nvim-lint",
     config = function()
       require "configs/nvim-lint"
-    end
+    end,
   },
 
   -- override plugin configs
   {
     "williamboman/mason.nvim",
-    opts = overrides.mason
+    opts = overrides.mason,
   },
 
   {
@@ -53,6 +53,15 @@ return {
     config = function()
       require("better_escape").setup()
     end,
+  },
+  {
+    "andymass/vim-matchup",
+    event = "VimEnter",
+    opts = {
+      treesitter = {
+        stopline = 500,
+      },
+    },
   },
 
   -- To make a plugin not be loaded
