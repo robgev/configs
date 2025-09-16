@@ -63,6 +63,15 @@ return {
       },
     },
   },
+  {
+    "augmentcode/augment.vim",
+    init = function()
+      vim.g.augment_disable_tab_mapping = true
+      vim.g.augment_workspace_folders = {
+        "~/src",
+      }
+    end,
+  },
 
   -- To make a plugin not be loaded
   -- {
