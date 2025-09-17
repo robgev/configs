@@ -65,8 +65,9 @@ return {
   },
   {
     "augmentcode/augment.vim",
+    cmd = "Augment",
     init = function()
-      vim.g.augment_disable_tab_mapping = true
+      vim.g.augment_disable_tab_mapping = false
       vim.g.augment_workspace_folders = {
         "~/src",
       }
