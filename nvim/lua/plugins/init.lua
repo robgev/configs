@@ -65,7 +65,7 @@ return {
   },
   {
     "augmentcode/augment.vim",
-    cmd = "Augment",
+    event = "VimEnter",
     init = function()
       vim.g.augment_disable_tab_mapping = false
       vim.g.augment_workspace_folders = {
