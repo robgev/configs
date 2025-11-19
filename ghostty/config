@@ -1,0 +1,5 @@
+background = 09111a
+foreground = d9e6f2
+cursor-style = bar
+cursor-style-blink = true
+window-save-state = always
