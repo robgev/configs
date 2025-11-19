@@ -3,6 +3,7 @@ foreground = d9e6f2
 cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor
+window-decoration=false
 window-save-state = always
 background-opacity=0.95
 custom-shader = ~/.config/ghostty/shaders/cursor_warp.glsl

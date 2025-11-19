@@ -79,7 +79,11 @@ THEMES=(
 RANDOM_THEME=${THEMES[$RANDOM % ${#THEMES[@]}]}
 
 if grep -q "^theme = " "$GHOSTTY_CONFIG"; then
-  sed -i '' "s/^theme = .*/theme = $RANDOM_THEME/" "$GHOSTTY_CONFIG"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s/^theme = .*/theme = $RANDOM_THEME/" "$GHOSTTY_CONFIG"
+  else
+    sed -i "s/^theme = .*/theme = $RANDOM_THEME/" "$GHOSTTY_CONFIG"
+  fi
 else
   echo "theme = $RANDOM_THEME" >> "$GHOSTTY_CONFIG"
 fi
