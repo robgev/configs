@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -79,35 +86,32 @@ antigen bundle rake
 antigen bundle rails
 antigen bundle nvm
 antigen bundle node
+antigen bundle direnv
 antigen bundle bundler
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
 # Load the theme.
-antigen theme bhilburn/powerlevel9k powerlevel9k
+antigen theme romkatv/powerlevel10k powerlevel10k
 # Tell Antigen that you're done.
 antigen apply
 
 # Feel free to change the powerline
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+POWERLEVEL10K_LEFT_PROMPT_ELEMENTS=(
   dir
   custom_node
-  custom_ruby
   vcs
   status
 )
 
-RGLOBAL="$(rbenv global)"
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
-POWERLEVEL9K_CUSTOM_NODE="echo -n '\ued0d' $(node --version)"
-POWERLEVEL9K_CUSTOM_NODE_BACKGROUND="green"
-POWERLEVEL9K_CUSTOM_RUBY="echo -n '\ue23e' $RGLOBAL"
-POWERLEVEL9K_CUSTOM_RUBY_BACKGROUND="red"
+POWERLEVEL10K_RIGHT_PROMPT_ELEMENTS=()
+POWERLEVEL10K_CUSTOM_NODE="echo -n '\ue718' $(node --version)"
+POWERLEVEL10K_CUSTOM_NODE_BACKGROUND="green"
 
 
 plugins=(
   zsh-autosuggestions
-  ruby
   git
+  direnv
 )
 
 # source $ZSH/oh-my-zsh.sh
@@ -120,11 +124,11 @@ plugins=(
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -138,53 +142,45 @@ plugins=(
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# nvm config - can go into ~/.zshenv as well 
+# nvm config
 export NVM_DIR="$HOME/.nvm"
   [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
 
-# Always eval rbenv
-eval "$(rbenv init -)"
 export PATH="/usr/local/opt/postgresql@10/bin:$PATH"
+
 alias vim=nvim
 
-export PATH="$HOME/.bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
-
 . "$HOME/.local/bin/env"
-export OPENBLAS="/opt/homebrew/opt/openblas"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Discord Integration Environment Variables
-export DISCORD_SERVICE_URL=""
 
-export EDITOR="nvim"
-source /Users/robertgevorgyan/.claude/plugins/marketplaces/claude-plugins/env.sh
+# BEGIN opam configuration
+# This is useful if you're using opam as it adds:
+#   - the correct directories to the PATH
+#   - auto-completion for the opam binary
+# This section can be safely removed at any time if needed.
+[[ ! -r '/home/asgardian/.opam/opam-init/init.zsh' ]] || source '/home/asgardian/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+# END opam configuration
 
-function getdlq() {
-  if [[ -z "$1" ]]; then
-    echo "Error: Queue name is required"
-    echo "Usage: get-dlq-messages <queue-name> [max-messages]"
-    return 1
-  fi
+# bun completions
+[ -s "/home/asgardian/.bun/_bun" ] && source "/home/asgardian/.bun/_bun"
 
-  local dlq_url=$(aws sqs get-queue-url \
-    --queue-name "$1" \
-    --query 'QueueUrl' \
-    --output text)
+eval "$(~/.rbenv/bin/rbenv init -)"
 
-  if [[ -z "$dlq_url" ]]; then
-    echo "Error: Could not retrieve queue URL for $queue_name"
-    return 1
-  fi
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
-  echo "Queue URL: $dlq_url"
+alias claude="/home/asgardian/.claude/local/claude"
 
-  aws sqs receive-message \
-    --queue-url "$dlq_url" \
-    --max-number-of-messages 10 \
-    --visibility-timeout 0 \
-    --query 'Messages[].MessageId' \
-    --output text
+function wtfchrome {
+  rm -rf ~/.config/google-chrome/Singleton*
 }
+# use direnv without oh-my-zsh
+# eval "$(direnv hook zsh)"
+alias cht='~/.config/ghostty/shuffle-theme.sh'
+alias shazam="tmuxinator start shazam"
 
-alias shuffle-theme='~/.config/ghostty/shuffle-theme.sh'
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
